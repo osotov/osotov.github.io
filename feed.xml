@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+<title type="text">osotov</title>
+<generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
+<link rel="self" type="application/atom+xml" href="/feed.xml" />
+<link rel="alternate" type="text/html" href="" />
+<updated>2015-09-01T22:31:04+04:00</updated>
+<id>/</id>
+<author>
+  <name>Михаил Осотов</name>
+  <uri>/</uri>
+  <email>reghan7@gmail.com</email>
+</author>
+
+
+<entry>
+  <title type="html"><![CDATA[Первый пост]]></title>
+ <link rel="alternate" type="text/html" href="/first-post/" />
+  <id>/first-post</id>
+  <updated>2015-08-31T00:00:00-00:00</updated>
+  <published>2015-10-01T00:00:00+04:00</published>
+  
+  <author>
+    <name>Михаил Осотов</name>
+    <uri></uri>
+    <email>reghan7@gmail.com</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;На самом деле, это не первый мой пост. Ранее я писал в блогах 1С-Битрикс. Вот &lt;a href=&quot;http://dev.1c-bitrix.ru/community/webdev/user/165764/blog/11020/&quot;&gt;тут&lt;/a&gt;  и &lt;a href=&quot;http://dev.1c-bitrix.ru/community/webdev/user/165764/blog/11281/&quot;&gt;тут&lt;/a&gt;. Большая часть коммерческих проектов, в которых мне довелось принимать участие, разрабатывалась на платформе 1С-Битрикс. Поэтому ничего удивительного, что много статей в моем блоге будет посвящено именно этому инструменту.&lt;/p&gt;
+
+&lt;p&gt;Помимо разработки я занимался обучением стажеров, учавствовал в разработке программы стажировки и внутрикорпоративных стандартов разработки веб-приложений на 1С-Битрикс и PHP.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;/first-post/&quot;&gt;Первый пост&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;&quot;&gt;osotov&lt;/a&gt; on October 01, 2015.&lt;/p&gt;
+  </content>
+</entry>
+
+</feed>
