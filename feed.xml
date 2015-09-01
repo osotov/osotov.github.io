@@ -2,27 +2,27 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
 <title type="text">osotov</title>
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
-<link rel="self" type="application/atom+xml" href="/feed.xml" />
-<link rel="alternate" type="text/html" href="" />
-<updated>2015-09-01T22:31:04+04:00</updated>
-<id>/</id>
+<link rel="self" type="application/atom+xml" href="http://osotov.github.io/feed.xml" />
+<link rel="alternate" type="text/html" href="http://osotov.github.io" />
+<updated>2015-09-01T22:41:03+04:00</updated>
+<id>http://osotov.github.io/</id>
 <author>
   <name>Михаил Осотов</name>
-  <uri>/</uri>
+  <uri>http://osotov.github.io/</uri>
   <email>reghan7@gmail.com</email>
 </author>
 
 
 <entry>
   <title type="html"><![CDATA[Первый пост]]></title>
- <link rel="alternate" type="text/html" href="/first-post/" />
-  <id>/first-post</id>
+ <link rel="alternate" type="text/html" href="http://osotov.github.io/first-post/" />
+  <id>http://osotov.github.io/first-post</id>
   <updated>2015-08-31T00:00:00-00:00</updated>
   <published>2015-10-01T00:00:00+04:00</published>
   
   <author>
     <name>Михаил Осотов</name>
-    <uri></uri>
+    <uri>http://osotov.github.io</uri>
     <email>reghan7@gmail.com</email>
   </author>
   <content type="html">
@@ -30,7 +30,7 @@
 
 &lt;p&gt;Помимо разработки я занимался обучением стажеров, учавствовал в разработке программы стажировки и внутрикорпоративных стандартов разработки веб-приложений на 1С-Битрикс и PHP.&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;/first-post/&quot;&gt;Первый пост&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;&quot;&gt;osotov&lt;/a&gt; on October 01, 2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/first-post/&quot;&gt;Первый пост&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on October 01, 2015.&lt;/p&gt;
   </content>
 </entry>
 
