@@ -4,13 +4,112 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://osotov.github.io/feed.xml" />
 <link rel="alternate" type="text/html" href="http://osotov.github.io" />
-<updated>2015-10-05T23:01:57+04:00</updated>
+<updated>2015-10-20T22:39:28+04:00</updated>
 <id>http://osotov.github.io/</id>
 <author>
   <name>Михаил Осотов</name>
   <uri>http://osotov.github.io/</uri>
   <email>reghan7@gmail.com</email>
 </author>
+
+
+<entry>
+  <title type="html"><![CDATA[Подкасты]]></title>
+ <link rel="alternate" type="text/html" href="http://osotov.github.io/podcasts/" />
+  <id>http://osotov.github.io/podcasts</id>
+  <updated>2015-10-20T00:00:00-00:00</updated>
+  <published>2015-10-20T00:00:00+04:00</published>
+  
+  <author>
+    <name>Михаил Осотов</name>
+    <uri>http://osotov.github.io</uri>
+    <email>reghan7@gmail.com</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Чтобы быть востребованным в IT-индустрии, надо постоянно учиться. Технологии развиваются с невероятными скоростями. Те инструменты, с помощью которых сегодня выполняешь поставленные перед тобой задачи, могут безнадежно устареть через год-два. Если посмотреть на тенденцию появления новых js-фреймворков, то впору за голову хвататься.&lt;/p&gt;
+
+&lt;p&gt;Существует множество источников, которыми можно воспользоваться для повышения квалификации: книги, скринкасты, документация, вебинары, конференции и т.д. В этой статье я расскажу о менее распространенном способе получения знаний - подкастах.&lt;/p&gt;
+
+&lt;p&gt;Вот что говорит википедия о &lt;a href=&quot;https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D0%B4%D0%BA%D0%B0%D1%81%D1%82%D0%B8%D0%BD%D0%B3&quot; target=&quot;blank&quot;&gt;подкастах&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Подкастинг (англ. podcasting, от iPod и англ. broadcasting — повсеместное вещание, широковещание) — процесс создания и распространения звуковых или видеофайлов (подкастов) в стиле радио- и телепередач в Интернете (вещание в Интернете). Как правило, подкасты имеют определенную тематику и периодичность издания.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Популярность подкастов в России, на мой взгляд, заметно ниже, чем допустим в Штатах или Европе. На это есть пара очевидных причин. Первая заключается в том, что качественных подкастов о разработке на русском языке очень мало. А вторая, более очевидная, связана с тем, что все хорошие подкасты на английском языке. И если с чтением на английском языке у большинства разработчиков в нашей стране все более или менее хорошо, то с восприятием английского на слух проблем намного больше.&lt;/p&gt;
+
+&lt;p&gt;Мое знакомство с подкастами произошло случайно - наткнулся на приложение подкастов в AppStore телефона, и мне стало интересно, что это такое. С тех пор подкасты постепенно заменили музыку в наушниках.&lt;/p&gt;
+
+&lt;p&gt;Для прослушивания подкастов на десктопе предпочитаю использовать iTunes, а в случае телефона - соответствующее приложение. Это очень удобно, потому что список на устройствах общий.&lt;/p&gt;
+
+&lt;p&gt;А теперь перечислю свои любимые каналы:&lt;/p&gt;
+
+&lt;h3 id=&quot;php&quot;&gt;Пятиминутка PHP&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/5minphp.jpeg&quot; alt=&quot;Пятиминутка PHP&quot; class=&quot;image-right&quot; /&gt;
+&lt;a href=&quot;http://5minphp.ru/&quot; target=&quot;blank&quot;&gt;http://5minphp.ru/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;На текущий момент это единственный русскоязычный подкаст в моем списке.&lt;/p&gt;
+
+&lt;p&gt;Тот факт, что подкаст на русском языке, не является его единственным достоинством. В подкасте поднимаются очень интересные и актуальные темы в контексте современной php-разработки.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-changelog&quot;&gt;The Changelog&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/changelog.jpeg&quot; alt=&quot;The Changelog&quot; class=&quot;image-right&quot; /&gt;
+&lt;a href=&quot;https://changelog.com/&quot; target=&quot;blank&quot;&gt;https://changelog.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Это очень крутой подкаст, количество выпусков которого приближается к двум сотням. Такие долгожители - большая редкость в сфере подкастинга.&lt;/p&gt;
+
+&lt;p&gt;В рамках подкаста обсуждается множество различных тем в сфере IT, что позволяет серьезно расширить свой кругозор.&lt;/p&gt;
+
+&lt;h3 id=&quot;full-stack-radio&quot;&gt;Full stack radio&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/fullstackradio.jpeg&quot; alt=&quot;Full stack radio&quot; class=&quot;image-right&quot; /&gt;
+&lt;a href=&quot;http://www.fullstackradio.com/&quot; target=&quot;blank&quot;&gt;http://www.fullstackradio.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Подкаст, на мой взгляд, похож на The Changelog, но тематика более ограничена. Основной упор делается на веб-разработку.&lt;/p&gt;
+
+&lt;p&gt;Ведущий подкаста Adam Wathan является php-разработчиком. А, следовательно, множество выпусков посвящено нашему любимому php.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-laravel-podcast&quot;&gt;The Laravel Podcast&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/laravelpodcast.jpeg&quot; alt=&quot;The Laravel Podcast&quot; class=&quot;image-right&quot; /&gt;
+&lt;a href=&quot;http://www.laravelpodcast.com/&quot; target=&quot;blank&quot;&gt;http://www.laravelpodcast.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Как видно из названия, этот подкаст о php-фреймворке Laravel. Мне жутко нравится этот фреймворк, поэтому добавить подкаст в список было более чем логичным поворотом событий.&lt;/p&gt;
+
+&lt;p&gt;В рамках подкаста обсуждается все, что связано с данным фреймворком.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-php-roundtable&quot;&gt;The PHP Roundtable&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/phproundtable.jpeg&quot; alt=&quot;The PHP Roundtable&quot; class=&quot;image-right&quot; /&gt;
+&lt;a href=&quot;https://www.phproundtable.com/&quot; target=&quot;blank&quot;&gt;https://www.phproundtable.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Подкаст обо всем, что связано с php.&lt;/p&gt;
+
+&lt;p&gt;Формат подкаста предполагает несколько гостей из мира php.&lt;/p&gt;
+
+&lt;p&gt;Помимо php обсуждаются близкие к разработке темы на этом языке темы (например, конференции).&lt;/p&gt;
+
+&lt;h3 id=&quot;php-town-hall&quot;&gt;PHP Town Hall&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/phptownhall.jpeg&quot; alt=&quot;PHP Town Hall&quot; class=&quot;image-right&quot; /&gt;
+&lt;a href=&quot;http://phptownhall.com/&quot; target=&quot;blank&quot;&gt;http://phptownhall.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Если вы хотите послушать подкаст с неформальной обстановкой - это именно то, что вам нужно. Phil Sturgeon - один из ведущих подкаста и этого уже достаточно, чтобы добавить подкаст в свой список.&lt;/p&gt;
+
+&lt;p&gt;Тематика подкаста - веб-разработка.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-five-minute-geek-show&quot;&gt;The Five-Minute Geek Show&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/fiveminutegeekshow.jpeg&quot; alt=&quot;The Five-Minute Geek Show&quot; class=&quot;image-right&quot; /&gt;
+&lt;a href=&quot;http://www.fiveminutegeekshow.com/&quot; target=&quot;blank&quot;&gt;http://www.fiveminutegeekshow.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Пятиминутный подкаст о веб-разработке и всем, что с ней связано. Благодаря своему формату он отлично помогает скоротать свободные пять минут с пользой.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/podcasts/&quot;&gt;Подкасты&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 20.10.2015.&lt;/p&gt;
+  </content>
+</entry>
 
 
 <entry>
