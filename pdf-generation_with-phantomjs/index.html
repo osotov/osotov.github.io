@@ -1,0 +1,348 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="ru"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="ru"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="ru"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Генерация pdf-файлов с помощью PhantomJS &#8211; osotov</title>
+<meta name="description" content="Подкасты или еще один способ узнать что-то новое">
+<meta name="keywords" content="php, bitrix, phantomjs">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Генерация pdf-файлов с помощью PhantomJS">
+<meta property="og:description" content="Подкасты или еще один способ узнать что-то новое">
+<meta property="og:url" content="http://osotov.github.io/pdf-generation_with-phantomjs/">
+<meta property="og:site_name" content="osotov">
+
+    <meta property="og:image" content="http://osotov.github.io/images/phantomjs.jpeg" />
+    <link rel="image_src" href="http://osotov.github.io/images/phantomjs.jpeg"/>
+
+
+
+
+
+
+<link rel="canonical" href="http://osotov.github.io/pdf-generation_with-phantomjs/">
+<link href="http://osotov.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="osotov">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://osotov.github.io/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="http://osotov.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://osotov.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://osotov.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://osotov.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://osotov.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://osotov.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://osotov.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Открыть меню</button>
+	<ul class="dl-menu">
+		<li><a href="http://osotov.github.io/">На главную</a></li>
+		<li>
+			<a href="#">Об авторе</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="/images/avatar.jpg" alt="Михаил Осотов photo" class="author-photo">
+					<h4>Михаил Осотов</h4>
+					<p>Веб-разработчик. PHP, 1C-Bitrix, Laravel вот это все</p>
+				</li>
+				<li>
+					<a href="mailto:reghan7@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				<li>
+					<a href="http://linkedin.com/pub/mikhail-osotov/91/838/923"><i class="fa fa-fw fa-linkedin"></i> LinkedIn</a>
+				</li>
+				<li>
+					<a href="https://github.com/osotov"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Статьи</a>
+			<ul class="dl-submenu">
+				<li><a href="http://osotov.github.io/posts/">Все статьи</a></li>
+				<li><a href="http://osotov.github.io/tags/">Все теги</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="http://osotov.github.io/pdf-generation_with-phantomjs/" rel="bookmark" title="Генерация pdf-файлов с помощью PhantomJS">Генерация pdf-файлов с помощью PhantomJS</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2015-12-03T00:00:00+04:00">03.12.2015</time></span></h2>
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <p>Генерация pdf-документов является повседневной задачей в веб-разработке.
+В перечень таких документов входят счета, накладные, полисы и прочие.
+Существует множество готовых библиотек для решения этой задачи, в том числе и для php.
+Например, <a href="https://github.com/mpdf/mpdf" target="blank">mpdf</a>,<a href="http://www.tcpdf.org/" target="blank">tcpdf</a>, и многие другие.
+Файл можно собрать с помощью api этих библиотек, но это довольно долгое занятие.
+А времени на реализацию задачи много не бывает, не так ли?
+Поэтому чаще всего pdf-файл создается из html-представления, что довольно удобно.
+Но, к сожалению, не все так просто.
+У такого подхода есть множество подводных камней, способных вывести из себя кого угодно.</p>
+
+<p>Например:</p>
+
+<ul>
+  <li>Стили нельзя подключить отдельно, следовательно они должны быть включены в html-документ отдельным блоком, либо инлайново для каждого элемента. В этом нет ничего страшного, небольшое неудобство.</li>
+  <li>К сожалению, в таких библиотеках некоторые стили могут работать не так как этого от них ожидаешь, либо не работать в принципе. Это самый главный недостаток.</li>
+  <li>Из предыдущего пункта следует, что создать документ максимально соответствующий требованиям очень трудоемко, а порой просто невозможно.</li>
+  <li>А в случае разработки под Битрикс есть еще одна проблемка. Все знают, что для работы платформы требуется в php.ini установить параметр mbstring.func_overload в значение 2. А для создания pdf-файла, содержащего кириллицу потребуется значение 0. Обычно эта проблема решается с помощью настройки веб-сервера, но все равно неприятно.</li>
+</ul>
+
+<p>Сталкиваясь в очередной раз с такой задачей, я в все чаще задумываюсь о том, что генерацией pdf-файлов должен заниматься отдельный микросервис, особенно если проект большой, но это уже совсем другая история.</p>
+
+<p>Пришло время перейти к главной части этой статьи. Помимо вариантов предложенных выше, существует альтернативный - <a href="http://phantomjs.org/" target="blank">PhantomJS</a>.</p>
+
+<blockquote>
+  <p>PhantomJS — это сборка движка WebKit без графического интерфейса, позволяющая в режиме консоли загружать веб-страницу, выполнять JavaScript, полноценно работать с DOM, Canvas и SVG.</p>
+</blockquote>
+
+<p>Конечно, помимо перечисленных выше возможностей, он дает возможность создавать pdf-файлы.</p>
+
+<p>Каким образом? Говоря простым языком, он загружает требуемую веб-страницу и дает возможность сохранить результат как pdf-файл.</p>
+
+<p>Процесс установки PhantomJS достаточно подробно описан в <a href="http://phantomjs.org/download.html" target="blank">документации</a>, поэтому я не буду останавливаться на этом вопросе.</p>
+
+<p>Важным моментом в работе PhantomJS является js-файл (далее config.js), который своим содержанием определяет то, что именно мы хотим сделать.
+На официальном сайте есть множество готовых примеров таких файлов, с помощью которых решаются самые разные задачи, например, unit-тестирование.
+В числе примеров есть  <a href="https://github.com/ariya/phantomjs/blob/master/examples/rasterize.js" target="blank">сохранение веб-страницы в формате pdf</a>. Это именно то, что нам нужно.</p>
+
+<p>Пара небольших правок позволит использовать этот пример в наших целях.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webpage&#39;</span><span class="p">).</span><span class="nx">create</span><span class="p">(),</span>
+    <span class="nx">system</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;system&#39;</span><span class="p">),</span>
+    <span class="nx">address</span><span class="p">,</span> <span class="nx">output</span><span class="p">,</span> <span class="nx">size</span><span class="p">;</span>
+
+<span class="c1">//если аргументов мало или слишком много, выводится сообщение с помощью по использованию</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">||</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Usage: config.js URL filename [paperwidth*paperheight|paperformat] [zoom]&#39;</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;  paper (pdf output) examples: &quot;5in*7.5in&quot;, &quot;10cm*20cm&quot;, &quot;A4&quot;, &quot;Letter&quot;&#39;</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;  image (png/jpg output) examples: &quot;1920px&quot; entire page, window width 1920px&#39;</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;                                   &quot;800px*600px&quot; window, clipped to 800x600&#39;</span><span class="p">);</span>
+    <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// обработка аргументов</span>
+    <span class="nx">address</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="nx">output</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="nx">page</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">800</span> <span class="p">};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nx">substr</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">size</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">);</span>
+        <span class="nx">page</span><span class="p">.</span><span class="nx">paperSize</span> <span class="o">=</span> <span class="p">(</span><span class="nx">size</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="o">?</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">margin</span><span class="o">:</span> <span class="s1">&#39;0px&#39;</span> <span class="p">}</span>
+            <span class="o">:</span> <span class="p">{</span> <span class="nx">format</span><span class="o">:</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">orientation</span><span class="o">:</span> <span class="s1">&#39;portrait&#39;</span><span class="p">,</span> <span class="nx">margin</span><span class="o">:</span> <span class="s1">&#39;1cm&#39;</span> <span class="p">};</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Invalid path to pdf!&#39;</span><span class="p">);</span>
+        <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">page</span><span class="p">.</span><span class="nx">zoomFactor</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="c1">// открытие страницы и сохранение результата</span>
+    <span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">status</span> <span class="o">!==</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Unable to load the address!&#39;</span><span class="p">);</span>
+            <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">page</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">output</span><span class="p">);</span>
+                <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+            <span class="p">},</span> <span class="mi">200</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Далее, запустив из консоли следующую команду (делаю допущение, что PhantomJS доступен глобально):</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>phantomjs path/to/config.js <span class="s2">&quot;url&quot;</span> path/to/pdf/file <span class="s2">&quot;A4&quot;</span></code></pre></div>
+
+<p>Разберем аргументы по порядку:</p>
+
+<ol>
+  <li>Путь до config.js.</li>
+  <li>Адрес веб-страницы, которую надо преобразовать в pfd-файл.</li>
+  <li>Путь до pdf-файла, в который произойдет сохранение результата.</li>
+  <li>Формат pdf-файла.</li>
+</ol>
+
+<p>Получаем искомый pdf-файл.</p>
+
+<p>Возвращаясь к php, это решение довольно просто интегрировать в код.</p>
+
+<p>В простейшем случае это выглядит вот так:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$command = sprintf(</span>
+<span class="x">    &quot;phantomjs %s %s %s %s&quot;,</span>
+<span class="x">    $fullPathToConfigJS,</span>
+<span class="x">    $url,</span>
+<span class="x">    $fullPathToSave,</span>
+<span class="x">    $format</span>
+<span class="x">);</span>
+
+<span class="x">exec($command);</span></code></pre></div>
+
+<p>Итак, подведу итоги. На мой взгляд, такое решение имеет следующие достоинства:</p>
+
+<ul>
+  <li>Сверстать макет для такого документа <em>намного</em> проще. Это очень важно, т.к. не только упрощает разработку, но и не превращает в кошмар последующие правки документа.</li>
+  <li>Избавляет от нужды извращаться с mbstring.func_overload. Но это, несомненно, проблема характерная в основном для Битрикс.</li>
+</ul>
+
+<p>Конечно, есть и недостатки:</p>
+
+<ul>
+  <li>Не 100% поддержка всех css-стилей. Но в сравнении с библиотеками, перечисленными в начале стати, все очень хорошо.</li>
+  <li>Такое решение может отпугнуть начинающего разработчика.</li>
+</ul>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="http://osotov.github.io/tags/#php" title="Pages tagged php" class="tag"><span class="term">php</span></a><a href="http://osotov.github.io/tags/#bitrix" title="Pages tagged bitrix" class="tag"><span class="term">bitrix</span></a><a href="http://osotov.github.io/tags/#phantomjs" title="Pages tagged phantomjs" class="tag"><span class="term">phantomjs</span></a></span>
+        
+          <span>
+              <span class="entry-date date updated">
+                  <time datetime="2015-12-03">03.12.2015</time>
+              </span>
+          </span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=http://osotov.github.io/pdf-generation_with-phantomjs/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=http://osotov.github.io/pdf-generation_with-phantomjs/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="vk"><a href="http://vk.com/share.php?url=http://osotov.github.io/pdf-generation_with-phantomjs/" title="Share on VK"><span class="count"><i class="fa fa-vk"></i> Share</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="http://osotov.github.io/podcasts/" class="read-more-btn">Статьи</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="http://osotov.github.io/podcasts/" title="Подкасты">Подкасты</a></h3>
+      <p>Подкасты или еще один способ узнать что-то новое <a href="http://osotov.github.io/podcasts/">Читать дальше</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="http://osotov.github.io/unit-tests-in-bitrix-context-part-2/" title="Юнит-тестирование и Битрикс. Часть 2.">Юнит-тестирование и Битрикс. Часть 2.</a></h4>
+        <span>Опубликовано 16.09.2015</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="http://osotov.github.io/unit-tests-in-bitrix-context-part-1/" title="Юнит-тестирование и Битрикс. Часть 1.">Юнит-тестирование и Битрикс. Часть 1.</a></h4>
+        <span>Опубликовано 14.09.2015</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <div>
+    <span>&copy; 2015 Михаил Осотов. </span>
+</div>
+<div>
+    <span>Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+</div>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://osotov.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://osotov.github.io/assets/js/scripts.min.js"></script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-67043908-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'osotov'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	        
+
+</body>
+</html>

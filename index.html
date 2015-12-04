@@ -127,6 +127,149 @@
     
     <div class="entry-meta">
       <span class="entry-date date published updated">
+          <time datetime="2015-12-03T00:00:00+04:00">
+              <a href="http://osotov.github.io/pdf-generation_with-phantomjs/">03.12.2015</a>
+          </time>
+      </span>
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="http://osotov.github.io/pdf-generation_with-phantomjs/" rel="bookmark" title="Генерация pdf-файлов с помощью PhantomJS" itemprop="url">Генерация pdf-файлов с помощью PhantomJS</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>Генерация pdf-документов является повседневной задачей в веб-разработке.
+В перечень таких документов входят счета, накладные, полисы и прочие.
+Существует множество готовых библиотек для решения этой задачи, в том числе и для php.
+Например, <a href="https://github.com/mpdf/mpdf" target="blank">mpdf</a>,<a href="http://www.tcpdf.org/" target="blank">tcpdf</a>, и многие другие.
+Файл можно собрать с помощью api этих библиотек, но это довольно долгое занятие.
+А времени на реализацию задачи много не бывает, не так ли?
+Поэтому чаще всего pdf-файл создается из html-представления, что довольно удобно.
+Но, к сожалению, не все так просто.
+У такого подхода есть множество подводных камней, способных вывести из себя кого угодно.</p>
+
+<p>Например:</p>
+
+<ul>
+  <li>Стили нельзя подключить отдельно, следовательно они должны быть включены в html-документ отдельным блоком, либо инлайново для каждого элемента. В этом нет ничего страшного, небольшое неудобство.</li>
+  <li>К сожалению, в таких библиотеках некоторые стили могут работать не так как этого от них ожидаешь, либо не работать в принципе. Это самый главный недостаток.</li>
+  <li>Из предыдущего пункта следует, что создать документ максимально соответствующий требованиям очень трудоемко, а порой просто невозможно.</li>
+  <li>А в случае разработки под Битрикс есть еще одна проблемка. Все знают, что для работы платформы требуется в php.ini установить параметр mbstring.func_overload в значение 2. А для создания pdf-файла, содержащего кириллицу потребуется значение 0. Обычно эта проблема решается с помощью настройки веб-сервера, но все равно неприятно.</li>
+</ul>
+
+<p>Сталкиваясь в очередной раз с такой задачей, я в все чаще задумываюсь о том, что генерацией pdf-файлов должен заниматься отдельный микросервис, особенно если проект большой, но это уже совсем другая история.</p>
+
+<p>Пришло время перейти к главной части этой статьи. Помимо вариантов предложенных выше, существует альтернативный - <a href="http://phantomjs.org/" target="blank">PhantomJS</a>.</p>
+
+<blockquote>
+  <p>PhantomJS — это сборка движка WebKit без графического интерфейса, позволяющая в режиме консоли загружать веб-страницу, выполнять JavaScript, полноценно работать с DOM, Canvas и SVG.</p>
+</blockquote>
+
+<p>Конечно, помимо перечисленных выше возможностей, он дает возможность создавать pdf-файлы.</p>
+
+<p>Каким образом? Говоря простым языком, он загружает требуемую веб-страницу и дает возможность сохранить результат как pdf-файл.</p>
+
+<p>Процесс установки PhantomJS достаточно подробно описан в <a href="http://phantomjs.org/download.html" target="blank">документации</a>, поэтому я не буду останавливаться на этом вопросе.</p>
+
+<p>Важным моментом в работе PhantomJS является js-файл (далее config.js), который своим содержанием определяет то, что именно мы хотим сделать.
+На официальном сайте есть множество готовых примеров таких файлов, с помощью которых решаются самые разные задачи, например, unit-тестирование.
+В числе примеров есть  <a href="https://github.com/ariya/phantomjs/blob/master/examples/rasterize.js" target="blank">сохранение веб-страницы в формате pdf</a>. Это именно то, что нам нужно.</p>
+
+<p>Пара небольших правок позволит использовать этот пример в наших целях.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webpage&#39;</span><span class="p">).</span><span class="nx">create</span><span class="p">(),</span>
+    <span class="nx">system</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;system&#39;</span><span class="p">),</span>
+    <span class="nx">address</span><span class="p">,</span> <span class="nx">output</span><span class="p">,</span> <span class="nx">size</span><span class="p">;</span>
+
+<span class="c1">//если аргументов мало или слишком много, выводится сообщение с помощью по использованию</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">||</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Usage: config.js URL filename [paperwidth*paperheight|paperformat] [zoom]&#39;</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;  paper (pdf output) examples: &quot;5in*7.5in&quot;, &quot;10cm*20cm&quot;, &quot;A4&quot;, &quot;Letter&quot;&#39;</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;  image (png/jpg output) examples: &quot;1920px&quot; entire page, window width 1920px&#39;</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;                                   &quot;800px*600px&quot; window, clipped to 800x600&#39;</span><span class="p">);</span>
+    <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// обработка аргументов</span>
+    <span class="nx">address</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="nx">output</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="nx">page</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">800</span> <span class="p">};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nx">substr</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">size</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">);</span>
+        <span class="nx">page</span><span class="p">.</span><span class="nx">paperSize</span> <span class="o">=</span> <span class="p">(</span><span class="nx">size</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="o">?</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">margin</span><span class="o">:</span> <span class="s1">&#39;0px&#39;</span> <span class="p">}</span>
+            <span class="o">:</span> <span class="p">{</span> <span class="nx">format</span><span class="o">:</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">orientation</span><span class="o">:</span> <span class="s1">&#39;portrait&#39;</span><span class="p">,</span> <span class="nx">margin</span><span class="o">:</span> <span class="s1">&#39;1cm&#39;</span> <span class="p">};</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Invalid path to pdf!&#39;</span><span class="p">);</span>
+        <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">page</span><span class="p">.</span><span class="nx">zoomFactor</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="c1">// открытие страницы и сохранение результата</span>
+    <span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">status</span> <span class="o">!==</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Unable to load the address!&#39;</span><span class="p">);</span>
+            <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">page</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">output</span><span class="p">);</span>
+                <span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
+            <span class="p">},</span> <span class="mi">200</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Далее, запустив из консоли следующую команду (делаю допущение, что PhantomJS доступен глобально):</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>phantomjs path/to/config.js <span class="s2">&quot;url&quot;</span> path/to/pdf/file <span class="s2">&quot;A4&quot;</span></code></pre></div>
+
+<p>Разберем аргументы по порядку:</p>
+
+<ol>
+  <li>Путь до config.js.</li>
+  <li>Адрес веб-страницы, которую надо преобразовать в pfd-файл.</li>
+  <li>Путь до pdf-файла, в который произойдет сохранение результата.</li>
+  <li>Формат pdf-файла.</li>
+</ol>
+
+<p>Получаем искомый pdf-файл.</p>
+
+<p>Возвращаясь к php, это решение довольно просто интегрировать в код.</p>
+
+<p>В простейшем случае это выглядит вот так:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$command = sprintf(</span>
+<span class="x">    &quot;phantomjs %s %s %s %s&quot;,</span>
+<span class="x">    $fullPathToConfigJS,</span>
+<span class="x">    $url,</span>
+<span class="x">    $fullPathToSave,</span>
+<span class="x">    $format</span>
+<span class="x">);</span>
+
+<span class="x">exec($command);</span></code></pre></div>
+
+<p>Итак, подведу итоги. На мой взгляд, такое решение имеет следующие достоинства:</p>
+
+<ul>
+  <li>Сверстать макет для такого документа <em>намного</em> проще. Это очень важно, т.к. не только упрощает разработку, но и не превращает в кошмар последующие правки документа.</li>
+  <li>Избавляет от нужды извращаться с mbstring.func_overload. Но это, несомненно, проблема характерная в основном для Битрикс.</li>
+</ul>
+
+<p>Конечно, есть и недостатки:</p>
+
+<ul>
+  <li>Не 100% поддержка всех css-стилей. Но в сравнении с библиотеками, перечисленными в начале стати, все очень хорошо.</li>
+  <li>Такое решение может отпугнуть начинающего разработчика.</li>
+</ul>
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated">
           <time datetime="2015-10-20T00:00:00+04:00">
               <a href="http://osotov.github.io/podcasts/">20.10.2015</a>
           </time>
