@@ -16,7 +16,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Блог веб-разработчика">
 <meta property="og:description" content="Главная страница.">
-<meta property="og:url" content="http://osotov.github.io/index.html">
+<meta property="og:url" content="/index.html">
 <meta property="og:site_name" content="osotov">
 
 
@@ -25,7 +25,7 @@
 
 
 <link rel="canonical" href="http://osotov.github.io/">
-<link href="http://osotov.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="osotov">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="osotov">
 
 <!-- http://t.co/dKP3o1e -->
 <meta name="HandheldFriendly" content="True">
@@ -33,28 +33,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- For all browsers -->
-<link rel="stylesheet" href="http://osotov.github.io/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/main.css">
 <!-- Webfonts -->
 <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
 
 <meta http-equiv="cleartype" content="on">
 
 <!-- Load Modernizr -->
-<script src="http://osotov.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+<script src="/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
 <!-- Icons -->
 <!-- 16x16 -->
-<link rel="shortcut icon" href="http://osotov.github.io/favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
 <!-- 32x32 -->
-<link rel="shortcut icon" href="http://osotov.github.io/favicon.png">
+<link rel="shortcut icon" href="/favicon.png">
 <!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
-<link rel="apple-touch-icon-precomposed" href="http://osotov.github.io/images/apple-touch-icon-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png">
 <!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://osotov.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
 <!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://osotov.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
 <!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://osotov.github.io/images/apple-touch-icon-144x144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
 
 
 
@@ -109,7 +109,7 @@
   <div class="image-credit">Оригинал изображения: <a href="http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/">dargadgetz</a></div><!-- /.image-credit -->
   
     <div class="entry-image">
-      <img src="http://osotov.github.io/images/abstract-4.jpg" alt="Блог веб-разработчика">
+      <img src="/images/abstract-4.jpg" alt="Блог веб-разработчика">
     </div><!-- /.entry-image -->
   
   <div class="header-title">
@@ -122,6 +122,357 @@
 
 <div id="main" role="main">
   
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated">
+          <time datetime="2015-12-29T00:00:00+04:00">
+              <a href="http://osotov.github.io/passbook/">29.12.2015</a>
+          </time>
+      </span>
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="http://osotov.github.io/passbook/" rel="bookmark" title="Генерация пассов для Wallet(Passbook)" itemprop="url">Генерация пассов для Wallet(Passbook)</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>Рекомендую обратиться к статье в <a href="https://en.wikipedia.org/wiki/Wallet_(application)" target="blank">википедии</a>, если слышите о приложении Wallet(Passbook) впервые.</p>
+
+<p>Существует <a href="https://developer.apple.com/wallet/" target="blank">документация для разработчиков</a>, желающих реализовать генерацию пассов.</p>
+
+<p>Обычно добавление пассов в приложение реализуют через мобильное приложение, в котором есть функционал генерации пассов, либо через отправку на почту.</p>
+
+<p>Я же расскажу о более редком виде распространения пассов.
+Предположим, что есть задача дать возможность пользователям iPhone добавить себе в приложение Wallet(Passbook) сгенерированный пасс с определенными данными по нажатию кнопки на веб-сайте.
+Не буду описывать логику на клиенте. В примере будет код обычного скрипта, при вызове которого будет происходить генерация пасса.</p>
+
+<p>Самым большим препятствием для реализации подобной задачи является потребность в валидном сертификате разработчика под ios.
+Сертификат можно получить только при наличии учетной записи разработчика, которая доступна по годовой платной подписке.</p>
+
+<p>Если кратко, то пасс - это упакованные в один файл изображения и несколько конфигов, подписанный сертификатами.</p>
+
+<p>Писать свой генератор пассов - занятие, на которое у рядового разработчика просто нет времени.
+Правильным решением будет воспользоваться готовым решением, если таковое имеется.
+Я рекомендую eo/passbook, отличный php-пакет, который поможет решить задачу быстро и эффективно.</p>
+
+<p>Устанавливаем eo/passbook</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>composer require <span class="s2">&quot;eo/passbook&quot;</span> <span class="s2">&quot;1.*&quot;</span></code></pre></div>
+
+<p>Подключаем автозагрузку Composer.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">require &#39;vendor/autoload.php&#39;;</span></code></pre></div>
+
+<p>Согласно документации существует несколько типов пассов.
+Различия между этими типами заключаются в дизайне и наборе полей, доступных на лицевой стороне пасса.
+Допустим, что типом пасса будет “Билет”.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">// каждый пасс должен иметь уникальный идентификатор</span>
+<span class="x">$date = new \DateTime();</span>
+<span class="x">$uniqueId = &#39;best_pass_ever_&#39; . $date-&gt;format(&#39;Y_m_d_h_i_s&#39;);</span>
+<span class="x">$pass = new EventTicket($uniqueId, &#39;Wallet example&#39;);</span>
+<span class="x">// устанавливаем цвет бэкграунда</span>
+<span class="x">$pass-&gt;setBackgroundColor(&#39;rgb(255, 255, 255)&#39;);</span>
+<span class="x">// устанавливаем цвет шрифта</span>
+<span class="x">$pass-&gt;setForegroundColor(&#39;rgb(0, 0, 0)&#39;);</span>
+<span class="x">// устанавливаем цвет шрифта лейблов</span>
+<span class="x">$pass-&gt;setLabelColor(&#39;rgb(0, 0, 0)&#39;);</span></code></pre></div>
+
+<p>Далее создаем структуру полей пасса.
+Начнем с поля заголовка и вторичного поля.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$structure = new Structure();</span>
+
+<span class="x">// поле заголовка</span>
+<span class="x">// конструктор поля должен состоять из уникального ключа и значения поля</span>
+<span class="x">$headerField = new Field(&#39;header&#39;, &#39;Поле заголовка&#39;);</span>
+<span class="x">// также можно добавить лейбл</span>
+<span class="x">$headerField-&gt;setLabel(&#39;Лейбл поля заголовка&#39;);</span>
+<span class="x">$structure-&gt;addHeaderField($headerField);</span>
+
+<span class="x">// вторичное поле</span>
+<span class="x">$secondaryField = new Field(&#39;secondary&#39;, &#39;Вторичное поле&#39;);</span>
+<span class="x">$secondaryField-&gt;setLabel(&#39;Лейбл вторичного поля&#39;);</span>
+<span class="x">$structure-&gt;addSecondaryField($secondaryField);</span></code></pre></div>
+
+<p>Продолжим с дополнительным полем и полями задней стороны пасса.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">// дополнительное поле</span>
+<span class="x">$auxiliaryField = new Field(&#39;auxiliary&#39;, &#39;Дополнительное поле&#39;);</span>
+<span class="x">$auxiliaryField-&gt;setLabel(&#39;Лейбл дополнительного поля&#39;);</span>
+<span class="x">$structure-&gt;addAuxiliaryField($auxiliaryField);</span>
+
+<span class="x">// первое поле задней стороны пасса</span>
+<span class="x">$backField = new Field(&#39;back_field_one&#39;, &#39;+7 (999) 999-99-99&#39;);</span>
+<span class="x">$backField-&gt;setLabel(&#39;Пример с номером телефона:&#39;);</span>
+<span class="x">$structure-&gt;addBackField($backField);</span>
+
+<span class="x">// второе поле задней стороны пасса</span>
+<span class="x">$backField = new Field(&#39;back_field_two&#39;, &#39;&lt;a href=&quot;https://google.com&quot;&gt;Ссылка&lt;/a&gt;&#39;);</span>
+<span class="x">$backField-&gt;setLabel(&#39;Пример ссылки:&#39;);</span>
+<span class="x">$structure-&gt;addBackField($backField);</span>
+
+<span class="x">// можно не ограничиваться одним или двумя!</span></code></pre></div>
+
+<p>Пришло время добавить изображения.
+Важно отметить, что изображения должны быть разных размеров для обычных и ретина дисплеев.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">// логотип</span>
+<span class="x">$logoImage = new Image(&#39;/full/path/to/logo/&#39;, &#39;logo&#39;);</span>
+<span class="x">$pass-&gt;addImage($logoImage);</span>
+<span class="x">$logoImage = new Image(&#39;/full/path/to/retina/logo/&#39;, &#39;logo&#39;);</span>
+<span class="x">$logoImage-&gt;setIsRetina(true);</span>
+<span class="x">$pass-&gt;addImage($logoImage);</span>
+
+<span class="x">// иконка, видна на экране блокировки</span>
+<span class="x">$iconImage = new Image(&#39;/full/path/to/icon/&#39;, &#39;icon&#39;);</span>
+<span class="x">$pass-&gt;addImage($iconImage);</span>
+<span class="x">$iconImage = new Image(&#39;/full/path/to/retina/icon/&#39;, &#39;icon&#39;);</span>
+<span class="x">$iconImage-&gt;setIsRetina(true);</span>
+<span class="x">$pass-&gt;addImage($iconImage);</span>
+
+<span class="x">// strip</span>
+<span class="x">$stripImage = new Image(&#39;/full/path/to/strip/&#39;, &#39;strip&#39;);</span>
+<span class="x">$pass-&gt;addImage($stripImage);</span>
+<span class="x">$stripImage = new Image(&#39;/full/path/to/retina/strip/&#39;, &#39;strip&#39;);</span>
+<span class="x">$stripImage-&gt;setIsRetina(true);</span>
+<span class="x">$pass-&gt;addImage($stripImage);</span></code></pre></div>
+
+<p>Есть возможность добавить отдельную ссылку на какое-либо приложение в AppStore.
+Для примера добавим приложение Youtube.
+Для добавления требуется идентификатор приложения.
+Узнать его можно из ссылки на приложение.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$pass-&gt;addAssociatedStoreIdentifier(544007664);</span></code></pre></div>
+
+<p>Добавление bar/qr-кода опционально. Добавим qr-код, ведущий на главную страницу поисковика Google.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$barcode = new Barcode(Barcode::TYPE_QR, &#39;http://google.com&#39;);</span>
+<span class="x">$pass-&gt;setBarcode($barcode);</span></code></pre></div>
+
+<p>Заканчиваем генерацию структуры и создаем пасс.
+Параметры, передаваемые в конструктор PassFactory в большинстве своем можно узнать из аккаунта разработчика под ios.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$pass-&gt;setStructure($structure);</span>
+
+<span class="x">$factory = new PassFactory(</span>
+<span class="x">    // Идентификатор типа пасса (bundle id)</span>
+<span class="x">    &#39;TYPE_IDENTIFIER&#39;,</span>
+<span class="x">    // Идентификатор команды разработчика</span>
+<span class="x">    &#39;TEAM_ID&#39;,</span>
+<span class="x">    // Название компании разработчика</span>
+<span class="x">    &#39;ORGANIZATION_NAME&#39;,</span>
+<span class="x">    // Путь до сертификата разработчика</span>
+<span class="x">    &#39;/full/path/to/developer/certificate/&#39;,</span>
+<span class="x">    // Пароль к сертификату разработчика</span>
+<span class="x">    &#39;DEVELOPER_CERTIFICATE_PASSWORD&#39;,</span>
+<span class="x">    // Путь до WWDR сертификата</span>
+<span class="x">    &#39;/full/path/to/wwdr/certificate/&#39;,</span>
+<span class="x">);</span>
+
+<span class="x">$factory-&gt;setOverwrite(true);</span>
+<span class="x">// Путь до папки, в которую будут сохраняться готовые пассы</span>
+<span class="x">$factory-&gt;setOutputPath(&#39;/path/to/generated/passes/&#39;);</span>
+
+<span class="x">$file = $factory-&gt;package($pass);</span></code></pre></div>
+
+<p>Имеется возможность провалидировать готовый пасс. Воспользуемся этой возможностью.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$validator = new PassValidator();</span>
+<span class="x">$validator-&gt;validate($pass);</span>
+<span class="x">if ($validator-&gt;getErrors()) {</span>
+<span class="x">    $errorsString = implode(&#39; | &#39;, $validator-&gt;getErrors());</span>
+<span class="x">    throw new \Exception(&quot;Ошибки валидации passbook: $errorsString&quot;);</span>
+<span class="x">}</span></code></pre></div>
+
+<p>Теперь, когда пасс готов, его еще нужно отдать клиенту с определенными заголовками.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$passBookFullPath = $file-&gt;getPath() . &quot;/{$uniqueId}.pkpass&quot;;</span>
+
+<span class="x">header(&quot;Pragma: no-cache&quot;);</span>
+<span class="x">header(&quot;Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0&quot;);</span>
+<span class="x">header(&quot;Content-Type: application/vnd.apple.pkpass&quot;);</span>
+<span class="x">header(&#39;Content-Disposition: attachment; filename=&quot;pass.pkpass&quot;&#39;);</span>
+<span class="x">clearstatcache();</span>
+<span class="x">$fileSize = filesize($passBookFullPath);</span>
+<span class="x">if ($fileSize) {</span>
+<span class="x">    header(&quot;Content-Length: &quot; . $fileSize);</span>
+<span class="x">}</span>
+<span class="x">header(&#39;Content-Transfer-Encoding: binary&#39;);</span>
+<span class="x">if (filemtime($passBookFullPath)) {</span>
+<span class="x">    date_default_timezone_set(&quot;UTC&quot;);</span>
+<span class="x">    header(</span>
+<span class="x">        &#39;Last-Modified: &#39;</span>
+<span class="x">        . date(&quot;D, d M Y H:i:s&quot;, filemtime($passBookFullPath))</span>
+<span class="x">        . &#39; GMT&#39;</span>
+<span class="x">    );</span>
+<span class="x">}</span>
+<span class="x">flush();</span>
+<span class="x">readfile($passBookFullPath);</span>
+<span class="x">exit();</span></code></pre></div>
+
+<p>Собираем куски кода воедино:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s1">&#39;vendor/autoload.php&#39;</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Passbook\Pass\Barcode</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Passbook\Pass\Field</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Passbook\Pass\Image</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Passbook\Pass\Structure</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Passbook\PassFactory</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Passbook\PassValidator</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Passbook\Type\EventTicket</span><span class="p">;</span>
+
+<span class="c1">// каждый пасс должен иметь уникальный идентификатор</span>
+<span class="nv">$date</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\DateTime</span><span class="p">();</span>
+<span class="nv">$uniqueId</span> <span class="o">=</span> <span class="s1">&#39;best_pass_ever_&#39;</span> <span class="o">.</span> <span class="nv">$date</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="s1">&#39;Y_m_d_h_i_s&#39;</span><span class="p">);</span>
+<span class="nv">$pass</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventTicket</span><span class="p">(</span><span class="nv">$uniqueId</span><span class="p">,</span> <span class="s1">&#39;Wallet example&#39;</span><span class="p">);</span>
+<span class="c1">// устанавливаем цвет бэкграунда</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">setBackgroundColor</span><span class="p">(</span><span class="s1">&#39;rgb(255, 255, 255)&#39;</span><span class="p">);</span>
+<span class="c1">// устанавливаем цвет шрифта</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">setForegroundColor</span><span class="p">(</span><span class="s1">&#39;rgb(0, 0, 0)&#39;</span><span class="p">);</span>
+<span class="c1">// устанавливаем цвет шрифта лейблов</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">setLabelColor</span><span class="p">(</span><span class="s1">&#39;rgb(0, 0, 0)&#39;</span><span class="p">);</span>
+
+<span class="nv">$structure</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Structure</span><span class="p">();</span>
+
+<span class="c1">// поле заголовка</span>
+<span class="c1">// конструктор поля должен состоять из уникального ключа и значения поля</span>
+<span class="nv">$headerField</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Field</span><span class="p">(</span><span class="s1">&#39;header&#39;</span><span class="p">,</span> <span class="s1">&#39;Поле заголовка&#39;</span><span class="p">);</span>
+<span class="c1">// также можно добавить лейбл</span>
+<span class="nv">$headerField</span><span class="o">-&gt;</span><span class="na">setLabel</span><span class="p">(</span><span class="s1">&#39;Лейбл поля заголовка&#39;</span><span class="p">);</span>
+<span class="nv">$structure</span><span class="o">-&gt;</span><span class="na">addHeaderField</span><span class="p">(</span><span class="nv">$headerField</span><span class="p">);</span>
+
+<span class="c1">// вторичное поле</span>
+<span class="nv">$secondaryField</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Field</span><span class="p">(</span><span class="s1">&#39;secondary&#39;</span><span class="p">,</span> <span class="s1">&#39;Вторичное поле&#39;</span><span class="p">);</span>
+<span class="nv">$secondaryField</span><span class="o">-&gt;</span><span class="na">setLabel</span><span class="p">(</span><span class="s1">&#39;Лейбл вторичного поля&#39;</span><span class="p">);</span>
+<span class="nv">$structure</span><span class="o">-&gt;</span><span class="na">addSecondaryField</span><span class="p">(</span><span class="nv">$secondaryField</span><span class="p">);</span>
+
+<span class="c1">// дополнительное поле</span>
+<span class="nv">$auxiliaryField</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Field</span><span class="p">(</span><span class="s1">&#39;auxiliary&#39;</span><span class="p">,</span> <span class="s1">&#39;Дополнительное поле&#39;</span><span class="p">);</span>
+<span class="nv">$auxiliaryField</span><span class="o">-&gt;</span><span class="na">setLabel</span><span class="p">(</span><span class="s1">&#39;Лейбл дополнительного поля&#39;</span><span class="p">);</span>
+<span class="nv">$structure</span><span class="o">-&gt;</span><span class="na">addAuxiliaryField</span><span class="p">(</span><span class="nv">$auxiliaryField</span><span class="p">);</span>
+
+<span class="c1">// первое поле задней стороны пасса</span>
+<span class="nv">$backField</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Field</span><span class="p">(</span><span class="s1">&#39;back_field_one&#39;</span><span class="p">,</span> <span class="s1">&#39;+7 (999) 999-99-99&#39;</span><span class="p">);</span>
+<span class="nv">$backField</span><span class="o">-&gt;</span><span class="na">setLabel</span><span class="p">(</span><span class="s1">&#39;Пример с номером телефона:&#39;</span><span class="p">);</span>
+<span class="nv">$structure</span><span class="o">-&gt;</span><span class="na">addBackField</span><span class="p">(</span><span class="nv">$backField</span><span class="p">);</span>
+
+<span class="c1">// второе поле задней стороны пасса</span>
+<span class="nv">$backField</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Field</span><span class="p">(</span><span class="s1">&#39;back_field_two&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;a href=&quot;https://google.com&quot;&gt;Ссылка&lt;/a&gt;&#39;</span><span class="p">);</span>
+<span class="nv">$backField</span><span class="o">-&gt;</span><span class="na">setLabel</span><span class="p">(</span><span class="s1">&#39;Пример ссылки:&#39;</span><span class="p">);</span>
+<span class="nv">$structure</span><span class="o">-&gt;</span><span class="na">addBackField</span><span class="p">(</span><span class="nv">$backField</span><span class="p">);</span>
+
+<span class="c1">// можно не ограничиваться одним или двумя!</span>
+
+<span class="c1">// логотип</span>
+<span class="nv">$logoImage</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">(</span><span class="s1">&#39;/full/path/to/logo/&#39;</span><span class="p">,</span> <span class="s1">&#39;logo&#39;</span><span class="p">);</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">addImage</span><span class="p">(</span><span class="nv">$logoImage</span><span class="p">);</span>
+<span class="nv">$logoImage</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">(</span><span class="s1">&#39;/full/path/to/retina/logo/&#39;</span><span class="p">,</span> <span class="s1">&#39;logo&#39;</span><span class="p">);</span>
+<span class="nv">$logoImage</span><span class="o">-&gt;</span><span class="na">setIsRetina</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">addImage</span><span class="p">(</span><span class="nv">$logoImage</span><span class="p">);</span>
+
+<span class="c1">// иконка, видна на экране блокировки</span>
+<span class="nv">$iconImage</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">(</span><span class="s1">&#39;/full/path/to/icon/&#39;</span><span class="p">,</span> <span class="s1">&#39;icon&#39;</span><span class="p">);</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">addImage</span><span class="p">(</span><span class="nv">$iconImage</span><span class="p">);</span>
+<span class="nv">$iconImage</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">(</span><span class="s1">&#39;/full/path/to/retina/icon/&#39;</span><span class="p">,</span> <span class="s1">&#39;icon&#39;</span><span class="p">);</span>
+<span class="nv">$iconImage</span><span class="o">-&gt;</span><span class="na">setIsRetina</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">addImage</span><span class="p">(</span><span class="nv">$iconImage</span><span class="p">);</span>
+
+<span class="c1">// strip</span>
+<span class="nv">$stripImage</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">(</span><span class="s1">&#39;/full/path/to/strip/&#39;</span><span class="p">,</span> <span class="s1">&#39;strip&#39;</span><span class="p">);</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">addImage</span><span class="p">(</span><span class="nv">$stripImage</span><span class="p">);</span>
+<span class="nv">$stripImage</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">(</span><span class="s1">&#39;/full/path/to/retina/strip/&#39;</span><span class="p">,</span> <span class="s1">&#39;strip&#39;</span><span class="p">);</span>
+<span class="nv">$stripImage</span><span class="o">-&gt;</span><span class="na">setIsRetina</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">addImage</span><span class="p">(</span><span class="nv">$stripImage</span><span class="p">);</span>
+
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">addAssociatedStoreIdentifier</span><span class="p">(</span><span class="mi">544007664</span><span class="p">);</span>
+
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">setStructure</span><span class="p">(</span><span class="nv">$structure</span><span class="p">);</span>
+
+<span class="nv">$barcode</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Barcode</span><span class="p">(</span><span class="nx">Barcode</span><span class="o">::</span><span class="na">TYPE_QR</span><span class="p">,</span> <span class="s1">&#39;http://google.com&#39;</span><span class="p">);</span>
+<span class="nv">$pass</span><span class="o">-&gt;</span><span class="na">setBarcode</span><span class="p">(</span><span class="nv">$barcode</span><span class="p">);</span>
+
+<span class="nv">$factory</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PassFactory</span><span class="p">(</span>
+    <span class="c1">// Идентификатор типа пасса (bundle id)</span>
+    <span class="s1">&#39;TYPE_IDENTIFIER&#39;</span><span class="p">,</span>
+    <span class="c1">// Идентификатор команды разработчика</span>
+    <span class="s1">&#39;TEAM_ID&#39;</span><span class="p">,</span>
+    <span class="c1">// Название компании разработчика</span>
+    <span class="s1">&#39;ORGANIZATION_NAME&#39;</span><span class="p">,</span>
+    <span class="c1">// Путь до сертификата разработчика</span>
+    <span class="s1">&#39;/full/path/to/developer/certificate/&#39;</span><span class="p">,</span>
+    <span class="c1">// Пароль к сертификату разработчика</span>
+    <span class="s1">&#39;DEVELOPER_CERTIFICATE_PASSWORD&#39;</span><span class="p">,</span>
+    <span class="c1">// Путь до WWDR сертификата</span>
+    <span class="s1">&#39;/full/path/to/wwdr/certificate/&#39;</span><span class="p">,</span>
+<span class="p">);</span>
+
+<span class="nv">$factory</span><span class="o">-&gt;</span><span class="na">setOverwrite</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="c1">// Путь до папки, в которую будут сохраняться готовые пассы</span>
+<span class="nv">$factory</span><span class="o">-&gt;</span><span class="na">setOutputPath</span><span class="p">(</span><span class="s1">&#39;/path/to/generated/passes/&#39;</span><span class="p">);</span>
+
+<span class="nv">$file</span> <span class="o">=</span> <span class="nv">$factory</span><span class="o">-&gt;</span><span class="na">package</span><span class="p">(</span><span class="nv">$pass</span><span class="p">);</span>
+
+<span class="nv">$validator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PassValidator</span><span class="p">();</span>
+<span class="nv">$validator</span><span class="o">-&gt;</span><span class="na">validate</span><span class="p">(</span><span class="nv">$pass</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$validator</span><span class="o">-&gt;</span><span class="na">getErrors</span><span class="p">())</span> <span class="p">{</span>
+    <span class="nv">$errorsString</span> <span class="o">=</span> <span class="nb">implode</span><span class="p">(</span><span class="s1">&#39; | &#39;</span><span class="p">,</span> <span class="nv">$validator</span><span class="o">-&gt;</span><span class="na">getErrors</span><span class="p">());</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nx">\Exception</span><span class="p">(</span><span class="s2">&quot;Ошибки валидации passbook: </span><span class="si">$errorsString</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nv">$passBookFullPath</span> <span class="o">=</span> <span class="nv">$file</span><span class="o">-&gt;</span><span class="na">getPath</span><span class="p">()</span> <span class="o">.</span> <span class="s2">&quot;/</span><span class="si">{</span><span class="nv">$uniqueId</span><span class="si">}</span><span class="s2">.pkpass&quot;</span><span class="p">;</span>
+
+<span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Pragma: no-cache&quot;</span><span class="p">);</span>
+<span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0&quot;</span><span class="p">);</span>
+<span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-Type: application/vnd.apple.pkpass&quot;</span><span class="p">);</span>
+<span class="nb">header</span><span class="p">(</span><span class="s1">&#39;Content-Disposition: attachment; filename=&quot;pass.pkpass&quot;&#39;</span><span class="p">);</span>
+<span class="nb">clearstatcache</span><span class="p">();</span>
+<span class="nv">$fileSize</span> <span class="o">=</span> <span class="nb">filesize</span><span class="p">(</span><span class="nv">$passBookFullPath</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$fileSize</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-Length: &quot;</span> <span class="o">.</span> <span class="nv">$fileSize</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nb">header</span><span class="p">(</span><span class="s1">&#39;Content-Transfer-Encoding: binary&#39;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">filemtime</span><span class="p">(</span><span class="nv">$passBookFullPath</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nb">date_default_timezone_set</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">);</span>
+    <span class="nb">header</span><span class="p">(</span>
+        <span class="s1">&#39;Last-Modified: &#39;</span>
+        <span class="o">.</span> <span class="nb">date</span><span class="p">(</span><span class="s2">&quot;D, d M Y H:i:s&quot;</span><span class="p">,</span> <span class="nb">filemtime</span><span class="p">(</span><span class="nv">$passBookFullPath</span><span class="p">))</span>
+        <span class="o">.</span> <span class="s1">&#39; GMT&#39;</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+<span class="nb">flush</span><span class="p">();</span>
+<span class="nb">readfile</span><span class="p">(</span><span class="nv">$passBookFullPath</span><span class="p">);</span>
+<span class="k">exit</span><span class="p">();</span></code></pre></div>
+
+<p>В результате получим пасс примерно следующего содержания:</p>
+
+<p><img src="/images/wallet.jpg" alt="wallet example" /></p>
+
+<p>А вот его задняя сторона:</p>
+
+<p><img src="/images/wallet_back.jpg" alt="wallet back example" /></p>
+
+<p>Перечислять достоинства этой технологии я не буду, т.к. на мой взгляд они достаточно субъективны.</p>
+
+<p>А вот по недостаткам и подводным камням стоит пройтись:</p>
+
+<ul>
+  <li>Ужасная документация и это не только мое мнение.</li>
+  <li>Слишком много места отводится qr/bar кодам, остальной контент не всегда возможно уместить на лицевой стороне.</li>
+  <li>Ограничения на количество символов для лейблов как на лицевой так и на задней сторонах.</li>
+  <li>Если не указать какое-либо значение для полей на лицевой или задней стороне, то пасс будет считаться невалидным.</li>
+  <li>В целом, очень мало возможностей для кастомизации дизайна.</li>
+</ul>
+
+<p>Интересным моментом, незатронутым мной в этой статье, я считаю возможность обновлять пасс с помощью веб-сервиса. Об этом можно прочитать в документации.</p>
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
 <article class="hentry">
   <header>
     
@@ -718,37 +1069,37 @@
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->
 
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated">
-          <time datetime="2015-08-31T00:00:00+04:00">
-              <a href="http://osotov.github.io/first-post/">31.08.2015</a>
-          </time>
-      </span>
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="http://osotov.github.io/first-post/" rel="bookmark" title="Первый пост" itemprop="url">Первый пост</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <p>На самом деле, это не первый мой пост. Ранее я писал в блогах 1С-Битрикс. Вот <a href="http://dev.1c-bitrix.ru/community/webdev/user/165764/blog/11020/">тут</a>  и <a href="http://dev.1c-bitrix.ru/community/webdev/user/165764/blog/11281/">тут</a>. Большая часть коммерческих проектов, в которых мне довелось принимать участие, разрабатывалась на платформе 1С-Битрикс. Поэтому ничего удивительного, что много статей в моем блоге будет посвящено именно этому инструменту.</p>
-
-<p>Помимо разработки я занимался обучением стажеров, учавствовал в разработке программы стажировки и внутрикорпоративных стандартов разработки веб-приложений на 1С-Битрикс и PHP.</p>
-
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
 
 
+    <div class="pagination">
+        
+        Назад
+        
+        <ul class="inline-list">
+            <li>
+                
+                <span class="current-page">1</span>
+                
+            </li>
+            
+            <li>
+                
+                <a href="http://osotov.github.io/page2">2</a>
+                
+            </li>
+            
+        </ul>
+        
+        <a href="http://osotov.github.io/page2" class="btn">Далее</a>
+        
+    </div><!-- /.pagination -->
 
 </div><!-- /#main -->
 
 <div class="footer-wrapper">
   <footer role="contentinfo">
     <div>
-    <span>&copy; 2015 Михаил Осотов. </span>
+    <span>&copy; 2016 Михаил Осотов. </span>
 </div>
 <div>
     <span>Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
@@ -757,8 +1108,8 @@
 </div><!-- /.footer-wrapper -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="http://osotov.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-<script src="http://osotov.github.io/assets/js/scripts.min.js"></script>
+<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/assets/js/scripts.min.js"></script>
 
 
 <!-- Asynchronous Google Analytics snippet -->

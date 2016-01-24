@@ -4,13 +4,363 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://osotov.github.io/feed.xml" />
 <link rel="alternate" type="text/html" href="http://osotov.github.io" />
-<updated>2015-12-04T11:22:15+04:00</updated>
+<updated>2016-01-24T17:53:18+04:00</updated>
 <id>http://osotov.github.io/</id>
 <author>
   <name>Михаил Осотов</name>
   <uri>http://osotov.github.io/</uri>
   <email>reghan7@gmail.com</email>
 </author>
+
+
+<entry>
+  <title type="html"><![CDATA[Генерация пассов для Wallet(Passbook)]]></title>
+ <link rel="alternate" type="text/html" href="http://osotov.github.io/passbook/" />
+  <id>http://osotov.github.io/passbook</id>
+  <updated>2015-12-29T00:00:00-00:00</updated>
+  <published>2015-12-29T00:00:00+04:00</published>
+  
+  <author>
+    <name>Михаил Осотов</name>
+    <uri>http://osotov.github.io</uri>
+    <email>reghan7@gmail.com</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Рекомендую обратиться к статье в &lt;a href=&quot;https://en.wikipedia.org/wiki/Wallet_(application)&quot; target=&quot;blank&quot;&gt;википедии&lt;/a&gt;, если слышите о приложении Wallet(Passbook) впервые.&lt;/p&gt;
+
+&lt;p&gt;Существует &lt;a href=&quot;https://developer.apple.com/wallet/&quot; target=&quot;blank&quot;&gt;документация для разработчиков&lt;/a&gt;, желающих реализовать генерацию пассов.&lt;/p&gt;
+
+&lt;p&gt;Обычно добавление пассов в приложение реализуют через мобильное приложение, в котором есть функционал генерации пассов, либо через отправку на почту.&lt;/p&gt;
+
+&lt;p&gt;Я же расскажу о более редком виде распространения пассов.
+Предположим, что есть задача дать возможность пользователям iPhone добавить себе в приложение Wallet(Passbook) сгенерированный пасс с определенными данными по нажатию кнопки на веб-сайте.
+Не буду описывать логику на клиенте. В примере будет код обычного скрипта, при вызове которого будет происходить генерация пасса.&lt;/p&gt;
+
+&lt;p&gt;Самым большим препятствием для реализации подобной задачи является потребность в валидном сертификате разработчика под ios.
+Сертификат можно получить только при наличии учетной записи разработчика, которая доступна по годовой платной подписке.&lt;/p&gt;
+
+&lt;p&gt;Если кратко, то пасс - это упакованные в один файл изображения и несколько конфигов, подписанный сертификатами.&lt;/p&gt;
+
+&lt;p&gt;Писать свой генератор пассов - занятие, на которое у рядового разработчика просто нет времени.
+Правильным решением будет воспользоваться готовым решением, если таковое имеется.
+Я рекомендую eo/passbook, отличный php-пакет, который поможет решить задачу быстро и эффективно.&lt;/p&gt;
+
+&lt;p&gt;Устанавливаем eo/passbook&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;composer require &lt;span class=&quot;s2&quot;&gt;&amp;quot;eo/passbook&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1.*&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Подключаем автозагрузку Composer.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;require &amp;#39;vendor/autoload.php&amp;#39;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Согласно документации существует несколько типов пассов.
+Различия между этими типами заключаются в дизайне и наборе полей, доступных на лицевой стороне пасса.
+Допустим, что типом пасса будет “Билет”.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;// каждый пасс должен иметь уникальный идентификатор&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$date = new \DateTime();&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$uniqueId = &amp;#39;best_pass_ever_&amp;#39; . $date-&amp;gt;format(&amp;#39;Y_m_d_h_i_s&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass = new EventTicket($uniqueId, &amp;#39;Wallet example&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;// устанавливаем цвет бэкграунда&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;setBackgroundColor(&amp;#39;rgb(255, 255, 255)&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;// устанавливаем цвет шрифта&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;setForegroundColor(&amp;#39;rgb(0, 0, 0)&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;// устанавливаем цвет шрифта лейблов&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;setLabelColor(&amp;#39;rgb(0, 0, 0)&amp;#39;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Далее создаем структуру полей пасса.
+Начнем с поля заголовка и вторичного поля.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$structure = new Structure();&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;// поле заголовка&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;// конструктор поля должен состоять из уникального ключа и значения поля&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$headerField = new Field(&amp;#39;header&amp;#39;, &amp;#39;Поле заголовка&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;// также можно добавить лейбл&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$headerField-&amp;gt;setLabel(&amp;#39;Лейбл поля заголовка&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$structure-&amp;gt;addHeaderField($headerField);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;// вторичное поле&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$secondaryField = new Field(&amp;#39;secondary&amp;#39;, &amp;#39;Вторичное поле&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$secondaryField-&amp;gt;setLabel(&amp;#39;Лейбл вторичного поля&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$structure-&amp;gt;addSecondaryField($secondaryField);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Продолжим с дополнительным полем и полями задней стороны пасса.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;// дополнительное поле&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$auxiliaryField = new Field(&amp;#39;auxiliary&amp;#39;, &amp;#39;Дополнительное поле&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$auxiliaryField-&amp;gt;setLabel(&amp;#39;Лейбл дополнительного поля&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$structure-&amp;gt;addAuxiliaryField($auxiliaryField);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;// первое поле задней стороны пасса&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$backField = new Field(&amp;#39;back_field_one&amp;#39;, &amp;#39;+7 (999) 999-99-99&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$backField-&amp;gt;setLabel(&amp;#39;Пример с номером телефона:&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$structure-&amp;gt;addBackField($backField);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;// второе поле задней стороны пасса&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$backField = new Field(&amp;#39;back_field_two&amp;#39;, &amp;#39;&amp;lt;a href=&amp;quot;https://google.com&amp;quot;&amp;gt;Ссылка&amp;lt;/a&amp;gt;&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$backField-&amp;gt;setLabel(&amp;#39;Пример ссылки:&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$structure-&amp;gt;addBackField($backField);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;// можно не ограничиваться одним или двумя!&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Пришло время добавить изображения.
+Важно отметить, что изображения должны быть разных размеров для обычных и ретина дисплеев.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;// логотип&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$logoImage = new Image(&amp;#39;/full/path/to/logo/&amp;#39;, &amp;#39;logo&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;addImage($logoImage);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$logoImage = new Image(&amp;#39;/full/path/to/retina/logo/&amp;#39;, &amp;#39;logo&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$logoImage-&amp;gt;setIsRetina(true);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;addImage($logoImage);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;// иконка, видна на экране блокировки&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$iconImage = new Image(&amp;#39;/full/path/to/icon/&amp;#39;, &amp;#39;icon&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;addImage($iconImage);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$iconImage = new Image(&amp;#39;/full/path/to/retina/icon/&amp;#39;, &amp;#39;icon&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$iconImage-&amp;gt;setIsRetina(true);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;addImage($iconImage);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;// strip&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$stripImage = new Image(&amp;#39;/full/path/to/strip/&amp;#39;, &amp;#39;strip&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;addImage($stripImage);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$stripImage = new Image(&amp;#39;/full/path/to/retina/strip/&amp;#39;, &amp;#39;strip&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$stripImage-&amp;gt;setIsRetina(true);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;addImage($stripImage);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Есть возможность добавить отдельную ссылку на какое-либо приложение в AppStore.
+Для примера добавим приложение Youtube.
+Для добавления требуется идентификатор приложения.
+Узнать его можно из ссылки на приложение.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;addAssociatedStoreIdentifier(544007664);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Добавление bar/qr-кода опционально. Добавим qr-код, ведущий на главную страницу поисковика Google.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$barcode = new Barcode(Barcode::TYPE_QR, &amp;#39;http://google.com&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;setBarcode($barcode);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Заканчиваем генерацию структуры и создаем пасс.
+Параметры, передаваемые в конструктор PassFactory в большинстве своем можно узнать из аккаунта разработчика под ios.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$pass-&amp;gt;setStructure($structure);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;$factory = new PassFactory(&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    // Идентификатор типа пасса (bundle id)&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    &amp;#39;TYPE_IDENTIFIER&amp;#39;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    // Идентификатор команды разработчика&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    &amp;#39;TEAM_ID&amp;#39;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    // Название компании разработчика&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    &amp;#39;ORGANIZATION_NAME&amp;#39;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    // Путь до сертификата разработчика&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    &amp;#39;/full/path/to/developer/certificate/&amp;#39;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    // Пароль к сертификату разработчика&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    &amp;#39;DEVELOPER_CERTIFICATE_PASSWORD&amp;#39;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    // Путь до WWDR сертификата&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    &amp;#39;/full/path/to/wwdr/certificate/&amp;#39;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;$factory-&amp;gt;setOverwrite(true);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;// Путь до папки, в которую будут сохраняться готовые пассы&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$factory-&amp;gt;setOutputPath(&amp;#39;/path/to/generated/passes/&amp;#39;);&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;$file = $factory-&amp;gt;package($pass);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Имеется возможность провалидировать готовый пасс. Воспользуемся этой возможностью.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$validator = new PassValidator();&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$validator-&amp;gt;validate($pass);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;if ($validator-&amp;gt;getErrors()) {&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    $errorsString = implode(&amp;#39; | &amp;#39;, $validator-&amp;gt;getErrors());&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    throw new \Exception(&amp;quot;Ошибки валидации passbook: $errorsString&amp;quot;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Теперь, когда пасс готов, его еще нужно отдать клиенту с определенными заголовками.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$passBookFullPath = $file-&amp;gt;getPath() . &amp;quot;/{$uniqueId}.pkpass&amp;quot;;&lt;/span&gt;
+
+&lt;span class=&quot;x&quot;&gt;header(&amp;quot;Pragma: no-cache&amp;quot;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;header(&amp;quot;Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0&amp;quot;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;header(&amp;quot;Content-Type: application/vnd.apple.pkpass&amp;quot;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;header(&amp;#39;Content-Disposition: attachment; filename=&amp;quot;pass.pkpass&amp;quot;&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;clearstatcache();&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$fileSize = filesize($passBookFullPath);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;if ($fileSize) {&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    header(&amp;quot;Content-Length: &amp;quot; . $fileSize);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;header(&amp;#39;Content-Transfer-Encoding: binary&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;if (filemtime($passBookFullPath)) {&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    date_default_timezone_set(&amp;quot;UTC&amp;quot;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    header(&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;        &amp;#39;Last-Modified: &amp;#39;&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;        . date(&amp;quot;D, d M Y H:i:s&amp;quot;, filemtime($passBookFullPath))&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;        . &amp;#39; GMT&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;    );&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;flush();&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;readfile($passBookFullPath);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;exit();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Собираем куски кода воедино:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;vendor/autoload.php&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Passbook\Pass\Barcode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Passbook\Pass\Field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Passbook\Pass\Image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Passbook\Pass\Structure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Passbook\PassFactory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Passbook\PassValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Passbook\Type\EventTicket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// каждый пасс должен иметь уникальный идентификатор&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;\DateTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$uniqueId&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;best_pass_ever_&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Y_m_d_h_i_s&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EventTicket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$uniqueId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Wallet example&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// устанавливаем цвет бэкграунда&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setBackgroundColor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;rgb(255, 255, 255)&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// устанавливаем цвет шрифта&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setForegroundColor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;rgb(0, 0, 0)&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// устанавливаем цвет шрифта лейблов&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLabelColor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;rgb(0, 0, 0)&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$structure&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Structure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// поле заголовка&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// конструктор поля должен состоять из уникального ключа и значения поля&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$headerField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;header&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Поле заголовка&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// также можно добавить лейбл&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$headerField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Лейбл поля заголовка&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$structure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addHeaderField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$headerField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// вторичное поле&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$secondaryField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;secondary&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Вторичное поле&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$secondaryField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Лейбл вторичного поля&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$structure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addSecondaryField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$secondaryField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// дополнительное поле&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$auxiliaryField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;auxiliary&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Дополнительное поле&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$auxiliaryField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Лейбл дополнительного поля&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$structure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAuxiliaryField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$auxiliaryField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// первое поле задней стороны пасса&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$backField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;back_field_one&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;+7 (999) 999-99-99&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$backField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Пример с номером телефона:&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$structure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addBackField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$backField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// второе поле задней стороны пасса&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$backField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;back_field_two&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;lt;a href=&amp;quot;https://google.com&amp;quot;&amp;gt;Ссылка&amp;lt;/a&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$backField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Пример ссылки:&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$structure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addBackField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$backField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// можно не ограничиваться одним или двумя!&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// логотип&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$logoImage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/logo/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;logo&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$logoImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$logoImage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/retina/logo/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;logo&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$logoImage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setIsRetina&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$logoImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// иконка, видна на экране блокировки&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$iconImage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/icon/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;icon&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$iconImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$iconImage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/retina/icon/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;icon&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$iconImage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setIsRetina&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$iconImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// strip&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$stripImage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/strip/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;strip&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$stripImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$stripImage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/retina/strip/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;strip&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$stripImage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setIsRetina&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$stripImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAssociatedStoreIdentifier&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;544007664&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setStructure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$structure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$barcode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Barcode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Barcode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TYPE_QR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://google.com&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setBarcode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$barcode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$factory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;PassFactory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Идентификатор типа пасса (bundle id)&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;TYPE_IDENTIFIER&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Идентификатор команды разработчика&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;TEAM_ID&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Название компании разработчика&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;ORGANIZATION_NAME&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Путь до сертификата разработчика&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/developer/certificate/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Пароль к сертификату разработчика&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;DEVELOPER_CERTIFICATE_PASSWORD&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Путь до WWDR сертификата&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;/full/path/to/wwdr/certificate/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setOverwrite&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Путь до папки, в которую будут сохраняться готовые пассы&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setOutputPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/path/to/generated/passes/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;package&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$validator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;PassValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$validator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;validate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$validator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getErrors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$errorsString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;implode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39; | &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$validator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getErrors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;\Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Ошибки валидации passbook: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$errorsString&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$passBookFullPath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$uniqueId&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.pkpass&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Pragma: no-cache&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Content-Type: application/vnd.apple.pkpass&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Disposition: attachment; filename=&amp;quot;pass.pkpass&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;clearstatcache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$fileSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;filesize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$passBookFullPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$fileSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Content-Length: &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$fileSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Transfer-Encoding: binary&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;filemtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$passBookFullPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;date_default_timezone_set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;UTC&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;&amp;#39;Last-Modified: &amp;#39;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;D, d M Y H:i:s&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;filemtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$passBookFullPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; GMT&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;readfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$passBookFullPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;В результате получим пасс примерно следующего содержания:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/wallet.jpg&quot; alt=&quot;wallet example&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;А вот его задняя сторона:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/wallet_back.jpg&quot; alt=&quot;wallet back example&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Перечислять достоинства этой технологии я не буду, т.к. на мой взгляд они достаточно субъективны.&lt;/p&gt;
+
+&lt;p&gt;А вот по недостаткам и подводным камням стоит пройтись:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ужасная документация и это не только мое мнение.&lt;/li&gt;
+  &lt;li&gt;Слишком много места отводится qr/bar кодам, остальной контент не всегда возможно уместить на лицевой стороне.&lt;/li&gt;
+  &lt;li&gt;Ограничения на количество символов для лейблов как на лицевой так и на задней сторонах.&lt;/li&gt;
+  &lt;li&gt;Если не указать какое-либо значение для полей на лицевой или задней стороне, то пасс будет считаться невалидным.&lt;/li&gt;
+  &lt;li&gt;В целом, очень мало возможностей для кастомизации дизайна.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Интересным моментом, незатронутым мной в этой статье, я считаю возможность обновлять пасс с помощью веб-сервиса. Об этом можно прочитать в документации.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/passbook/&quot;&gt;Генерация пассов для Wallet(Passbook)&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 29.12.2015.&lt;/p&gt;
+  </content>
+</entry>
 
 
 <entry>
