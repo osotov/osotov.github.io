@@ -4,13 +4,149 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://osotov.github.io/feed.xml" />
 <link rel="alternate" type="text/html" href="http://osotov.github.io" />
-<updated>2016-01-24T17:53:18+04:00</updated>
+<updated>2016-05-26T10:39:16+04:00</updated>
 <id>http://osotov.github.io/</id>
 <author>
   <name>Михаил Осотов</name>
   <uri>http://osotov.github.io/</uri>
   <email>reghan7@gmail.com</email>
 </author>
+
+
+<entry>
+  <title type="html"><![CDATA[Refactoring to collections или как заменить foreach коллекциями]]></title>
+ <link rel="alternate" type="text/html" href="http://osotov.github.io/refactoring-to-collections/" />
+  <id>http://osotov.github.io/refactoring-to-collections</id>
+  <updated>2016-05-26T00:00:00-00:00</updated>
+  <published>2016-05-25T00:00:00+04:00</published>
+  
+  <author>
+    <name>Михаил Осотов</name>
+    <uri>http://osotov.github.io</uri>
+    <email>reghan7@gmail.com</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Этот пост будет целиком и полностью посвящен книге «Refactoring to collections», написанной Adam Wathan.&lt;/p&gt;
+
+&lt;p&gt;Начну с краткого рассказа об авторе.
+Если вы следите за тем, что происходит в php-сообществе, то об Adam Wathan (далее Адам) вы точно должны были слышать.
+Он является ведущим подкаста &lt;a href=&quot;http://www.fullstackradio.com/&quot; target=&quot;blank&quot;&gt;Full Stack Radio&lt;/a&gt;, ведет &lt;a href=&quot;http://adamwathan.me/&quot; target=&quot;blank&quot;&gt;блог о веб-разработке&lt;/a&gt;.
+Адам тесно связан с сообществом фреймворка Laravel.
+Периодически он выступает на конференциях, и я советую посмотреть &lt;a href=&quot;https://www.youtube.com/watch?v=5DVDewOReoY&quot; target=&quot;blank&quot;&gt;видео с его выступления на LaraconEU 2015&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;А теперь перейдем к самой книге.
+Если коротко, то автор предлагает отказаться от классического императивного обхода массива с помощью конструкций for и foreach в пользу использования коллекций.
+Сразу скажу, пугаться не надо, на самом деле автор немного лукавит.
+Всеми нами любимые for и foreach инкапсулируются методами коллекции.
+Да, все просто, никакой магии!
+Что касается коллекций, Адам предпочитает использовать готовое решений в виде коллекций из фреймворка Laravel.
+На самом деле, коллекции могут быть самописными или компонентами других фреймворков.
+Заменяя стандартный обход массивов методами типа map или reduce, мы делаем код заметно более выразительным и читаемым.
+На протяжении всей книги с помощью простых примеров кода автор пытается донести эту идею.
+И вы знаете?
+Я ему верю.
+Вместо одного большого куска лапшекода после рефакторинга мы получаем стройную pipeline конструкцию, в которой каждое действие отчуждаемо и понятно.&lt;/p&gt;
+
+&lt;p&gt;Приведу пример из бесплатной главы книги.
+Предположим, что мы хотим оценить недавнюю активность пользователя GitHub в баллах.
+Действия пользователя можно получить, сделав GET-запрос по адресу https://api.github.com/users/{username}/events.
+Ниже приведен пример json-ответа для данного запроса.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;3898913063&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;quot;type&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;PushEvent&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;quot;public&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;quot;actor&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;adamwathan&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;quot;repo&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;tightenco/jigsaw&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;quot;payload&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;/*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;*/&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Оцениваться активность будет следующим образом:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;PushEvent будет оцениваться в 5 баллов.&lt;/li&gt;
+  &lt;li&gt;CreateEvent будет оцениваться в 4 балла.&lt;/li&gt;
+  &lt;li&gt;IssuesEvent будет оцениваться в 3 балла.&lt;/li&gt;
+  &lt;li&gt;CommitCommentEvent будет оцениваться в 2 балла.&lt;/li&gt;
+  &lt;li&gt;Все остальные действия оцениваются в 1 балл.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Ниже представлен пример кода, написанный императивным стилем.
+Признаюсь, что решение очень близко к тому, которым я бы воспользовался до прочтения книги.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;githubScore&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Grab the events from the API, in the real world you&amp;#39;d probably use&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Guzzle or similar here, but keeping it simple for the sake of brevity.&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;https://api.github.com/users/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$username&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/events&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$events&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;json_decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Get all of the event types&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$eventTypes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$events&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$eventTypes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;type&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Loop over the event types and add up the corresponding scores&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$eventTypes&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$eventType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$eventType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;PushEvent&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;CreateEvent&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;IssuesEvent&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;CommitCommentEvent&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Я опущу промежуточные стадии рефакторинга и сразу перейду к его результату.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;githubScore&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;https://api.github.com/users/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$username&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/events&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nv&quot;&gt;$events&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;json_decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$events&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;pluck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;type&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$eventType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;PushEvent&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;CreateEvent&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;IssuesEvent&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;CommitCommentEvent&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$eventType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;На мой взгляд, выглядит очень хорошо и аккуратно.
+Названия методов говорят сами за себя.
+Мне очень понравилось то, как автор избавляется от конструкции switch, заменив ее коллекцией.
+Читать такой код сначала немного непривычно, но чем дальше углубляешься книгу, тем больше видишь в таком коде смысла.
+Если подумать, все эти идеи не так уж и новы, они активно используются в других языках программирования, особенно в функциональных.&lt;/p&gt;
+
+&lt;p&gt;Подводя итоги, хочу сказать, что идея книги мне очень нравится и хочется ее опробовать в своей работе как можно быстрее.
+Единственная мысль, которая не дает мне покоя - а как будут вести себя эти коллекции на гигантских объемах данных?
+Хотелось бы увидеть бенчмарки для таких случаев.&lt;/p&gt;
+
+&lt;p&gt;Вердикт - книга обязательна к прочтению! Купить ее или скачать бесплатный семпл можно по вот этой &lt;a href=&quot;http://adamwathan.me/refactoring-to-collections/&quot; target=&quot;blank&quot;&gt;ссылке&lt;/a&gt;.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/refactoring-to-collections/&quot;&gt;Refactoring to collections или как заменить foreach коллекциями&lt;/a&gt; автор статьи - Михаил Осотов.  Дата публикации - 25.05.2016.&lt;/p&gt;
+  </content>
+</entry>
 
 
 <entry>
@@ -358,7 +494,7 @@
 
 &lt;p&gt;Интересным моментом, незатронутым мной в этой статье, я считаю возможность обновлять пасс с помощью веб-сервиса. Об этом можно прочитать в документации.&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/passbook/&quot;&gt;Генерация пассов для Wallet(Passbook)&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 29.12.2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/passbook/&quot;&gt;Генерация пассов для Wallet(Passbook)&lt;/a&gt; автор статьи - Михаил Осотов.  Дата публикации - 29.12.2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -500,7 +636,7 @@
   &lt;li&gt;Такое решение может отпугнуть начинающего разработчика.&lt;/li&gt;
 &lt;/ul&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/pdf-generation_with-phantomjs/&quot;&gt;Генерация pdf-файлов с помощью PhantomJS&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 03.12.2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/pdf-generation_with-phantomjs/&quot;&gt;Генерация pdf-файлов с помощью PhantomJS&lt;/a&gt; автор статьи - Михаил Осотов.  Дата публикации - 03.12.2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -599,7 +735,7 @@
 
 &lt;p&gt;Пятиминутный подкаст о веб-разработке и всем, что с ней связано. Благодаря своему формату он отлично помогает скоротать свободные пять минут с пользой.&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/podcasts/&quot;&gt;Подкасты&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 20.10.2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/podcasts/&quot;&gt;Подкасты&lt;/a&gt; автор статьи - Михаил Осотов.  Дата публикации - 20.10.2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -874,7 +1010,7 @@
   &lt;li&gt;&lt;a href=&quot;http://tutsplus.com/&quot;&gt;tuts+&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/unit-tests-in-bitrix-context-part-2/&quot;&gt;Юнит-тестирование и Битрикс. Часть 2.&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 16.09.2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/unit-tests-in-bitrix-context-part-2/&quot;&gt;Юнит-тестирование и Битрикс. Часть 2.&lt;/a&gt; автор статьи - Михаил Осотов.  Дата публикации - 16.09.2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -950,7 +1086,7 @@
 
 &lt;p&gt;Очевидно, одной теории будет мало, поэтому во &lt;a href=&quot;/unit-tests-in-bitrix-context-part-2/&quot; target=&quot;blank&quot;&gt;второй части&lt;/a&gt; я расскажу о том, как подготовиться к написанию первого теста и приведу пример в контексте Битрикса.&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/unit-tests-in-bitrix-context-part-1/&quot;&gt;Юнит-тестирование и Битрикс. Часть 1.&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 14.09.2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/unit-tests-in-bitrix-context-part-1/&quot;&gt;Юнит-тестирование и Битрикс. Часть 1.&lt;/a&gt; автор статьи - Михаил Осотов.  Дата публикации - 14.09.2015.&lt;/p&gt;
   </content>
 </entry>
 
@@ -972,7 +1108,7 @@
 
 &lt;p&gt;Помимо разработки я занимался обучением стажеров, учавствовал в разработке программы стажировки и внутрикорпоративных стандартов разработки веб-приложений на 1С-Битрикс и PHP.&lt;/p&gt;
 
-    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/first-post/&quot;&gt;Первый пост&lt;/a&gt; was originally published by Михаил Осотов at &lt;a href=&quot;http://osotov.github.io&quot;&gt;osotov&lt;/a&gt; on 31.08.2015.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;http://osotov.github.io/first-post/&quot;&gt;Первый пост&lt;/a&gt; автор статьи - Михаил Осотов.  Дата публикации - 31.08.2015.&lt;/p&gt;
   </content>
 </entry>
 
